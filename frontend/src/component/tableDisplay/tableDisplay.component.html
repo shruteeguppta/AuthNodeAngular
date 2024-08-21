@@ -1,0 +1,40 @@
+ <div *ngIf="isLoading" class="loader">Loading...</div>
+
+ <table *ngIf="!isLoading">
+   <thead>
+     <tr>
+       <th>Event ID</th>
+       <th>Description</th>
+       <th>Start Time</th>
+       <th>End Time</th>
+     </tr>
+   </thead>
+   <tbody>
+     <ng-container *ngFor="let group of groupedEvents">
+       <ng-container *ngFor="let event of group.rows; let i = index">
+         <tr>
+           <!-- Print Event ID only for the first row of the group -->
+           <td *ngIf="i === 0" [attr.rowspan]="group.rows.length">{{ group.eventid }}</td>
+           <td>{{ event.description }}</td>
+           <td>{{ event.livestart }}</td>
+           <td>{{ event.liveend }}</td>
+         </tr>
+       </ng-container>
+     </ng-container>
+   </tbody>
+ </table>
+ 
+ <div *ngIf="pageCount > 1" class="pagination">
+   <button (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+   <button *ngFor="let page of [].constructor(pageCount); let i = index"
+           (click)="onPageChange(i + 1)"
+           [class.active]="i + 1 === currentPage">
+     {{ i + 1 }}
+   </button>
+   <button (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === pageCount">Next</button>
+ </div>
+ 
+ <button (click)="downloadExcel()">Download Excel</button>
+ <button (click)="signOut()">Sign Out</button>
+
+ 
